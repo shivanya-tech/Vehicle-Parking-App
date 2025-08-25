@@ -1,4 +1,3 @@
-Great — let’s summarize **what your "Vehicle Parking App - V1"** is all about in a clean, beginner-friendly way. This can be used in your report, presentation video, or README file:
 
 ---
 
@@ -61,4 +60,3 @@ A Flask-based web application that helps manage and reserve 4-wheeler parking sp
 
 ---
 
-Would you like a visual wireframe, database ER diagram, or help in writing this into a proper README/report section?
