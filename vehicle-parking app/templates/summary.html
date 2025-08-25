@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard{% endblock %}
+
+
+{% block navbar_links %}
+
+ <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('dashboard', username=username) }}">Home</a>
+  </li>
+  
+  
+  <li class="nav-item">
+    <a class="nav-link" href="/logout">Logout</a>
+  </li>
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Summary for {{ username }}</h2>
+
+  <div class="row mb-5">
+    <div class="col-md-6 mb-3">
+      <div class="card p-4 shadow-sm h-100 text-center">
+        <h4>Total Parking Hours</h4>
+        <p class="display-5">{{ total_hours | round(2) }} <small>hours</small></p>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <div class="card p-4 shadow-sm h-100 text-center">
+        <h4>Total Parking Cost</h4>
+        <p class="display-5">₹{{ total_cost | round(2) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="mb-4">Booking History</h4>
+  <div class="table-responsive mb-5">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Lot</th>
+          <th>Spot</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.lot.name }}</td>
+          <td>{{ booking.spot.spot_number }}</td>
+
+          <td>{{ booking.start_time.strftime('%d %b %Y %H:%M') }}</td>
+          <td>{{ booking.end_time.strftime('%d %b %Y %H:%M') if booking.end_time else 'Active' }}</td>
+          <td>
+            {% if booking.end_time %}
+              ₹{{ booking.cost }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="mb-4 text-center">Parking Summary Chart</h4>
+  <div class="d-flex justify-content-center">
+    <canvas id="costChart" style="max-width: 700px; width: 100%; height: 300px;"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('costChart').getContext('2d');
+
+  const costChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ labels | tojson }},
+      datasets: [{
+        label: 'Cost (₹)',
+        data: {{ costs | tojson }},
+        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+        borderRadius: 5,
+        maxBarThickness: 40
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Cost in ₹'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Booking Date'
+          },
+          ticks: {
+            maxRotation: 45,
+            minRotation: 30,
+            autoSkip: false
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 14
+            }
+          }
+        },
+        tooltip: {
+          enabled: true,
+          mode: 'index',
+          intersect: false,
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

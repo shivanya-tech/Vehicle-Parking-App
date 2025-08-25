@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}View Spots{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Parking Spots for Lot: {{ selected_lot.name }}</h3>
+    <a href="/admin_dashboard" class="btn btn-secondary mb-3">← Back to Dashboard</a>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Spot ID</th>
+                <th>Status</th>
+                <th>Booked By</th>
+                <th>vehicle_number</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% for spot in parking_spots %}
+    <tr>
+        <td>{{ spot.spot_number }}</td>
+        <td>{{ spot.status }}</td>
+        <td>{{ spot.user.username if spot.user else "-" }}</td>
+        <td>{{ spot.vehicle_number if spot.vehicle_number else "-" }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard{% endblock %}
+
+
+{% block navbar_links %}
+
+
+  <li>
+  <a class="nav-link" href="{{ url_for('summary', username=username) }}">Summary</a>
+
+</li>
+ <li class="nav-item">
+    <a class="nav-link" href="/logout">Logout</a>
+  </li>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+        <h2 style="text-align: center;">Welcome, {{ username }}!</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-success">
+          {% for message in messages %}
+            <div>{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+<h3> Parking Lots:</h3>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Lot id</th>
+      <th>Lot Name</th>
+      <th>Price</th>
+      <th>Location</th>
+      <th>Avaliablity</th>
+      <th>Action</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    {% for lot in parking_lots %}
+    <tr>
+      <td>{{lot.id}}</td>
+      <td>{{ lot.name }}</td>
+      <td>₹{{ lot.price }}/hr</td>
+      <td>{{ lot.location }}</td>
+      
+ <td>
+  {% if lot.available_spots > 0 %}
+    <span class="text-success">({{ lot.available_spots }} / {{ lot.total_spots }}) Available</span>
+  {% else %}
+    <span class="text-danger fw-bold">Unavailable</span>
+  {% endif %}
+</td>
+
+</td>
+
+
+      <td>
+        <form action="{{ url_for('show_reserve_form', lot_id=lot.id, username=username) }}" method="get" class="d-inline">
+  <button type="submit" class="btn btn-primary btn-sm">Reserve Spot</button>
+</form>
+
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+<h3>Booking history:</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Lot</th>
+      <th>Spot</th>
+      <th>Vehicle number</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Cost / Action</th>
+     
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for booking in bookings %}
+  <tr>
+    <td>{{ booking.lot.name }}</td>
+    <td>{{ booking.spot.spot_number }}</td>
+
+    <td>{{ booking.vehicle_number }}</td>
+    <td>{{ booking.start_time.strftime('%d %b %Y %H:%M:%S') }}</td>
+<td>{{ booking.end_time.strftime('%d %b %Y %H:%M:%S') if booking.end_time else 'Active' }}</td>
+<td>
+  
+      {% if not booking.end_time %}
+        <form action="/release/{{ booking.id }}/{{ username }}" method="post" class="d-inline">
+          <button type="submit" class="btn btn-danger btn-sm">Release</button>
+        </form>
+      {% else %}
+        ₹{{ booking.cost }}
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+
+</table>
+{%endblock%}

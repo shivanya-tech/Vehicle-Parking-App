@@ -1,0 +1,22 @@
+<!-- templates/home.html -->
+{% extends "base.html" %}
+
+{% block title %}Home - ParkEase{% endblock %}
+
+{% block content %}
+<div class="hero" style="
+    padding: 100px 20px;
+    text-align: center;
+    color: rgb(243, 240, 240);
+    background-image: url('{{ url_for('static', filename='pexels-mikebirdy-120049.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+">
+    <h1>Welcome to Smart Parking</h1>
+    <p>Efficiently book and manage your parking space anytime, anywhere.</p>
+
+    <a href="/login" class="btn btn-primary btn-custom">Get Started</a>
+    <a href="/register" class="btn btn-primary btn-custom">Register Now</a>
+</div>
+{% endblock %}

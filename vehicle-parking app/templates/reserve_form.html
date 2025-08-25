@@ -1,0 +1,27 @@
+
+{% extends "base.html"%}
+{% block content %}
+
+
+<div class="container mt-4">
+  <h2>Reserve Spot in {{ lot.name }}</h2>
+  
+  <form method="POST">
+  
+
+    <div class="mb-3">
+      <label for="spotId" class="form-label">Spot ID</label>
+      <input type="text" class="form-control" id="spotId" value="{{ spot.id }}" readonly>
+    </div>
+
+    <div class="mb-3">
+      <label for="vehicle_number" class="form-label">Vehicle Number</label>
+      <input type="text" class="form-control" name="vehicle_number" required>
+    </div>
+
+    
+
+    <button type="submit" class="btn btn-success">Confirm Reservation</button>
+  </form>
+</div>
+{% endblock %}

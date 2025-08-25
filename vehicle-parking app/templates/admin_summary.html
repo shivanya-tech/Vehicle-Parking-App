@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block navbar_links %}
+
+
+<li class="nav-item">
+    <a class="nav-link" href="/admin_users">Users</a>
+  </li>
+ <li class="nav-item">
+    <a class="nav-link" href="/logout">Logout</a>
+
+{%endblock%}
+{% block content %}
+<a href="/admin_dashboard" class="btn btn-outline-secondary">← Back to Dashboard</a>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Parking Summary</h2>
+    <div class="row">
+        <!-- Pie Chart -->
+        <div class="col-md-6">
+            <canvas id="occupancyChart"></canvas>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="col-md-6">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <strong>Occupied:</strong> {{ occupied }} |
+        <strong>Unoccupied:</strong> {{ unoccupied }} |
+        <strong>Total Revenue:</strong> ₹{{ total_revenue }}
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const occupancyCtx = document.getElementById('occupancyChart').getContext('2d');
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+
+    new Chart(occupancyCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Occupied', 'Unoccupied'],
+            datasets: [{
+                data: [{{ occupied }}, {{ unoccupied }}],
+                backgroundColor: ['#007bff', '#ffc107'],
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Occupied vs. Unoccupied',
+                    font: { size: 18 }
+                }
+            }
+        }
+    });
+
+    new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Revenue'],
+            datasets: [{
+                label: 'Total Revenue (₹)',
+                data: [{{ total_revenue }}],
+                backgroundColor: '#28a745'
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Total Revenue (₹)',
+                    font: { size: 18 }
+                },
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+
+{%endblock%}
