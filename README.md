@@ -39,6 +39,31 @@ A Flask-based web application that helps manage and reserve 4-wheeler parking sp
 | Validation | HTML5/JavaScript (Frontend), Flask (Backend) |
 
 ---
+## 📸 App Screenshots
+
+### 1. Home Page
+![Home](app(1).png)
+
+### 2. User Registration
+![Login](app(2).png)
+
+### 3. Admin Dashboard before adding lot
+![Admin Dashboard](app(3).png)
+
+### 4.  Admin Dashboard after adding lot
+![Add Lot](app(4).png)
+
+### 5. View Parking Spots
+![Spots](app(5).png)
+
+### 6. Parking Summary
+![Vehicle Entry](app(6).png)
+
+### 8. User Dashboard
+![History](app(7).png)
+
+### 6. User Summary
+![Vehicle Entry](app(8).png)
 
 ### 🗂️ Data Models (Main Tables)
 
